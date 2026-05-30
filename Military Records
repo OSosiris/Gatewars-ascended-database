@@ -1,0 +1,569 @@
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c10;--bg2:#0f1218;--bg3:#151a22;--bg4:#1c2330;
+  --border:#2a3548;--border2:#3a4f6a;
+  --text:#c8d8e8;--text2:#7a9ab8;--text3:#4a6a8a;
+  --gold:#f0c040;--silver:#b0bec5;--bronze:#cd7f32;
+  --accent:#4a9eff;--accent2:#2a6eba;
+  --red:#ff4a4a;--green:#4aff8a;--green2:#1a5a3a;
+  --mono:'Share Tech Mono',monospace;--head:'Rajdhani',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:13px;}
+.app{padding:1rem;}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.alliance-label{font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;font-family:var(--head);}
+.alliance-name{font-size:22px;font-weight:700;color:#fff;font-family:var(--head);letter-spacing:.04em;}
+.member-badge{background:var(--bg4);border:1px solid var(--border2);color:var(--accent);font-size:11px;padding:3px 10px;border-radius:2px;font-family:var(--head);letter-spacing:.06em;}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem;overflow-x:auto;}
+.tab{padding:8px 16px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:var(--head);letter-spacing:.05em;text-transform:uppercase;font-weight:600;transition:color .15s;white-space:nowrap;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab.weekly-tab.active{color:var(--green);border-bottom-color:var(--green);}
+.tab:hover:not(.active){color:var(--text);}
+.panel{display:none;}.panel.active{display:block;}
+.btn{padding:6px 14px;font-size:12px;border:1px solid var(--border2);border-radius:2px;background:transparent;color:var(--text);cursor:pointer;font-family:var(--head);letter-spacing:.06em;font-weight:600;text-transform:uppercase;transition:all .15s;}
+.btn:hover{background:var(--bg4);border-color:var(--accent);color:var(--accent);}
+.btn.primary{background:var(--accent2);border-color:var(--accent);color:#fff;}
+.btn.primary:hover{background:var(--accent);color:#000;}
+.btn.success{background:var(--green2);border-color:var(--green);color:var(--green);}
+.btn.success:hover{background:#1a7a4a;}
+.btn.danger{border-color:#a33;color:#f88;}
+.btn.danger:hover{background:#300;border-color:var(--red);color:var(--red);}
+.btn-sm{padding:3px 10px;font-size:11px;}
+input,select,textarea{font-family:var(--mono);font-size:12px;color:var(--text);background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:6px 10px;width:100%;outline:none;transition:border-color .15s;}
+input:focus,select:focus,textarea:focus{border-color:var(--border2);color:#fff;}
+textarea{resize:vertical;line-height:1.5;}
+select option{background:var(--bg3);}
+label{font-size:11px;color:var(--text3);display:block;margin-bottom:3px;font-family:var(--head);letter-spacing:.05em;text-transform:uppercase;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:1rem 1.25rem;}
+.metric{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:.75rem 1rem;}
+.metric .mlabel{font-size:10px;color:var(--text3);margin-bottom:4px;font-family:var(--head);letter-spacing:.08em;text-transform:uppercase;}
+.metric .mvalue{font-size:18px;font-weight:700;color:#fff;font-family:var(--head);}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{text-align:left;padding:8px 12px;font-size:10px;font-weight:700;color:var(--text3);border-bottom:1px solid var(--border);font-family:var(--head);letter-spacing:.1em;text-transform:uppercase;}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text);}
+tr:last-child td{border-bottom:none;}
+tr.data-row:hover td{background:var(--bg3);cursor:pointer;}
+.num{text-align:right;font-variant-numeric:tabular-nums;color:#fff;}
+.rank-medal{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:12px;font-weight:700;font-family:var(--head);}
+.medal-1{background:#c89000;color:#3a2000;}
+.medal-2{background:#8090a0;color:#1a2030;}
+.medal-3{background:#8b5010;color:#2a1000;}
+.medal-n{background:var(--bg4);color:var(--text3);border:1px solid var(--border);}
+.medal-0w{background:#1a5a3a;color:var(--green);border:1px solid var(--green);}
+.medal-1w{background:#1a3a5a;color:#88ccff;border:1px solid #4a9eff;}
+.medal-2w{background:#3a2a1a;color:#ffcc88;border:1px solid #cd7f32;}
+.section-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;font-family:var(--head);}
+.divider{border:none;border-top:1px solid var(--border);margin:1rem 0;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.form-group{display:flex;flex-direction:column;gap:3px;}
+.delta-pos{color:var(--green);font-size:11px;}
+.delta-neg{color:var(--red);font-size:11px;}
+.modal-bg{display:none;min-height:600px;background:rgba(0,0,0,.78);align-items:flex-start;justify-content:center;padding:2rem 1rem;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:3px;padding:1.5rem;width:min(560px,96vw);max-height:85vh;overflow-y:auto;}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);}
+.modal-title{font-size:18px;font-weight:700;color:#fff;font-family:var(--head);letter-spacing:.04em;}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);padding:2px 6px;line-height:1;}
+.modal-close:hover{color:var(--red);}
+.empty{text-align:center;padding:2.5rem;color:var(--text3);font-family:var(--head);letter-spacing:.06em;}
+.snap-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.snap-row:last-child{border-bottom:none;}
+.progress-wrap{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;margin-top:4px;}
+.progress-fill{height:100%;border-radius:2px;}
+.parse-preview{background:var(--bg4);border:1px solid var(--border2);border-radius:2px;padding:.75rem 1rem;margin-top:.75rem;font-size:11px;line-height:1.8;}
+.pk{color:var(--text3);}
+.pv{color:var(--green);font-weight:700;}
+.parsed-field{display:flex;justify-content:space-between;gap:8px;}
+.inactive-badge{display:inline-block;padding:2px 8px;border-radius:2px;font-size:10px;font-family:var(--head);font-weight:700;letter-spacing:.06em;background:#2a1a1a;border:1px solid #a33;color:#f88;}
+.active-badge{display:inline-block;padding:2px 8px;border-radius:2px;font-size:10px;font-family:var(--head);font-weight:700;letter-spacing:.06em;background:var(--green2);border:1px solid var(--green);color:var(--green);}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+
+<div class="app">
+<div class="header">
+  <div>
+    <div class="alliance-label">alliance command</div>
+    <div class="alliance-name" id="alliance-name-display">THE RELENTLESS</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <span class="member-badge" id="member-count-badge">0 MEMBERS</span>
+    <button class="btn btn-sm" onclick="openSettings()">CONFIG</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab weekly-tab active" onclick="switchTab('weekly')">⚡ WEEKLY</button>
+  <button class="tab" onclick="switchTab('leaderboard')">ALL-TIME</button>
+  <button class="tab" onclick="switchTab('members')">MEMBERS</button>
+  <button class="tab" onclick="switchTab('add')">+ ADD / UPDATE</button>
+</div>
+
+<div class="panel active" id="panel-weekly">
+  <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:flex-end;">
+    <div style="flex:1;min-width:180px;">
+      <label>category</label>
+      <select id="wk-category" onchange="renderWeekly()">
+        <option value="warPoints">TOTAL WAR XP GAINED</option>
+        <option value="totalKilled">TOTAL UNITS KILLED</option>
+        <option value="totalRaided">TOTAL UNITS RAIDED</option>
+        <option value="superSoldiersKilled">SUPER SOLDIERS KILLED</option>
+        <option value="soldiersKilled">SOLDIERS KILLED</option>
+        <option value="mercsKilled">MERCS KILLED</option>
+        <option value="spiesKilled">SPIES KILLED</option>
+        <option value="naqStolen">NAQUADAH STOLEN</option>
+        <option value="planetsTaken">PLANETS TAKEN</option>
+        <option value="wpDestroyed">WEAPON POINTS DESTROYED</option>
+      </select>
+    </div>
+    <div style="min-width:160px;">
+      <label>period</label>
+      <select id="wk-period" onchange="renderWeekly()">
+        <option value="last">latest vs previous</option>
+        <option value="2">last 2 snapshots</option>
+        <option value="4">last 4 snapshots</option>
+        <option value="all">all-time growth</option>
+      </select>
+    </div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:1.5rem;">
+    <div id="wk-table-container"><div class="empty">LOADING...</div></div>
+  </div>
+  <div>
+    <p class="section-title">this period — alliance totals</p>
+    <div class="grid4" id="wk-totals"></div>
+  </div>
+</div>
+
+<div class="panel" id="panel-leaderboard">
+  <div style="margin-bottom:1rem;">
+    <select id="lb-category" onchange="renderLeaderboard()">
+      <option value="warPoints">TOTAL WAR EXPERIENCE POINTS</option>
+      <option value="totalKilled">TOTAL UNITS KILLED</option>
+      <option value="totalRaided">TOTAL UNITS RAIDED</option>
+      <option value="superSoldiersKilled">SUPER SOLDIERS KILLED</option>
+      <option value="soldiersKilled">SOLDIERS KILLED</option>
+      <option value="mercsKilled">MERCS KILLED</option>
+      <option value="spiesKilled">SPIES KILLED</option>
+      <option value="naqStolen">NAQUADAH STOLEN</option>
+      <option value="planetsTaken">PLANETS TAKEN</option>
+      <option value="planetsNet">PLANETS NET</option>
+      <option value="wpDestroyed">WEAPON POINTS DESTROYED</option>
+      <option value="naqLost">NAQUADAH LOST</option>
+    </select>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:1.5rem;">
+    <div id="lb-table-container"><div class="empty">LOADING...</div></div>
+  </div>
+  <div>
+    <p class="section-title">alliance totals (latest snapshots)</p>
+    <div class="grid4" id="alliance-totals"></div>
+  </div>
+</div>
+
+<div class="panel" id="panel-members">
+  <div style="display:flex;gap:8px;margin-bottom:1rem;">
+    <input type="text" id="member-search" placeholder="SEARCH PLAYERS..." oninput="renderMembers()" style="flex:1;">
+    <button class="btn" onclick="switchTab('add')">+ ADD</button>
+  </div>
+  <div id="members-list"></div>
+</div>
+
+<div class="panel" id="panel-add">
+  <div class="card" style="margin-bottom:10px;border-color:var(--accent2);">
+    <p class="section-title" style="color:var(--accent);">paste ME — auto parse</p>
+    <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+      <div class="form-group" style="flex:1;min-width:160px;">
+        <label>player name *</label>
+        <input type="text" id="f-name" placeholder="e.g. Jedi Tank">
+      </div>
+      <div class="form-group" style="min-width:140px;">
+        <label>snapshot date *</label>
+        <input type="date" id="f-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>paste full ME text here</label>
+      <textarea id="paste-area" rows="6" placeholder="Paste everything from your ME page — labels and numbers..." oninput="parsePaste()"></textarea>
+    </div>
+    <div id="parse-preview"></div>
+    <div style="display:flex;gap:8px;margin-top:.75rem;justify-content:flex-end;">
+      <button class="btn btn-sm" onclick="clearAll()">CLEAR</button>
+      <button class="btn btn-sm success" onclick="saveSnapshot()">SAVE SNAPSHOT</button>
+    </div>
+    <div id="save-status" style="margin-top:.5rem;font-size:12px;text-align:right;font-family:var(--head);letter-spacing:.06em;"></div>
+  </div>
+  <details>
+    <summary style="cursor:pointer;font-size:11px;color:var(--text3);font-family:var(--head);letter-spacing:.08em;text-transform:uppercase;padding:.5rem 0;user-select:none;">manual entry (fallback)</summary>
+    <div class="card" style="margin-top:8px;">
+      <p class="section-title">achievements</p>
+      <div class="form-grid">
+        <div class="form-group"><label>atk mercs killed</label><input type="text" id="f-atkMercsKilled" placeholder="0"></div>
+        <div class="form-group"><label>def mercs killed</label><input type="text" id="f-defMercsKilled" placeholder="0"></div>
+        <div class="form-group"><label>atk soldiers killed</label><input type="text" id="f-atkSoldiersKilled" placeholder="0"></div>
+        <div class="form-group"><label>def soldiers killed</label><input type="text" id="f-defSoldiersKilled" placeholder="0"></div>
+        <div class="form-group"><label>atk SS killed</label><input type="text" id="f-atkSSKilled" placeholder="0"></div>
+        <div class="form-group"><label>def SS killed</label><input type="text" id="f-defSSKilled" placeholder="0"></div>
+        <div class="form-group"><label>spies killed</label><input type="text" id="f-spiesKilled" placeholder="0"></div>
+        <div class="form-group"><label>spy killers killed</label><input type="text" id="f-spyKillersKilled" placeholder="0"></div>
+        <div class="form-group"><label>MS weapons destroyed</label><input type="text" id="f-msWeaponsDestroyed" placeholder="0"></div>
+        <div class="form-group"><label>MS shields destroyed</label><input type="text" id="f-msShieldsDestroyed" placeholder="0"></div>
+        <div class="form-group"><label>MS fleets destroyed</label><input type="text" id="f-msFleetsDestroyed" placeholder="0"></div>
+        <div class="form-group"><label>planet def destroyed</label><input type="text" id="f-planetDefDestroyed" placeholder="0"></div>
+        <div class="form-group"><label>planets taken</label><input type="text" id="f-planetsTaken" placeholder="0"></div>
+        <div class="form-group"><label>naquadah stolen</label><input type="text" id="f-naqStolen" placeholder="0"></div>
+        <div class="form-group"><label>UU raided</label><input type="text" id="f-uuRaided" placeholder="0"></div>
+        <div class="form-group"><label>WP destroyed</label><input type="text" id="f-wpDestroyed" placeholder="0"></div>
+        <div class="form-group"><label>attack turns used</label><input type="text" id="f-attackTurns" placeholder="0"></div>
+        <div class="form-group"><label>TOTAL WAR XP</label><input type="text" id="f-warPoints" placeholder="0" style="border-color:var(--accent2);color:var(--accent);"></div>
+      </div>
+      <div class="divider"></div>
+      <p class="section-title">losses</p>
+      <div class="form-grid">
+        <div class="form-group"><label>atk mercs lost</label><input type="text" id="f-atkMercsLost" placeholder="0"></div>
+        <div class="form-group"><label>def mercs lost</label><input type="text" id="f-defMercsLost" placeholder="0"></div>
+        <div class="form-group"><label>raiders lost</label><input type="text" id="f-raidersLost" placeholder="0"></div>
+        <div class="form-group"><label>guards lost</label><input type="text" id="f-guardsLost" placeholder="0"></div>
+        <div class="form-group"><label>SS lost</label><input type="text" id="f-ssLost" placeholder="0"></div>
+        <div class="form-group"><label>SG lost</label><input type="text" id="f-sgLost" placeholder="0"></div>
+        <div class="form-group"><label>UA lost</label><input type="text" id="f-uaLost" placeholder="0"></div>
+        <div class="form-group"><label>assassins lost</label><input type="text" id="f-assLost" placeholder="0"></div>
+        <div class="form-group"><label>MS weapons lost</label><input type="text" id="f-msWeaponsLost" placeholder="0"></div>
+        <div class="form-group"><label>MS shields lost</label><input type="text" id="f-msShieldsLost" placeholder="0"></div>
+        <div class="form-group"><label>MS fleets lost</label><input type="text" id="f-msFleetsLost" placeholder="0"></div>
+        <div class="form-group"><label>planet def lost</label><input type="text" id="f-planetDefLost" placeholder="0"></div>
+        <div class="form-group"><label>planets lost</label><input type="text" id="f-planetsLost" placeholder="0"></div>
+        <div class="form-group"><label>naquadah lost</label><input type="text" id="f-naqLost" placeholder="0"></div>
+        <div class="form-group"><label>untrained lost</label><input type="text" id="f-untrainedLost" placeholder="0"></div>
+        <div class="form-group"><label>WP lost</label><input type="text" id="f-wpLost" placeholder="0"></div>
+        <div class="form-group"><label>turns against you</label><input type="text" id="f-turnsAgainst" placeholder="0"></div>
+      </div>
+    </div>
+  </details>
+</div>
+</div>
+
+<div class="modal-bg" id="player-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-player-name">PLAYER</span>
+      <button class="modal-close" onclick="document.getElementById('player-modal').classList.remove('open')">x</button>
+    </div>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="settings-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">CONFIG</span>
+      <button class="modal-close" onclick="document.getElementById('settings-modal').classList.remove('open')">x</button>
+    </div>
+    <div class="form-group" style="margin-bottom:1rem;">
+      <label>alliance name</label>
+      <input type="text" id="s-alliance-name">
+    </div>
+    <button class="btn primary" onclick="saveSettings()" style="width:100%;">SAVE</button>
+  </div>
+</div>
+
+<script>
+const SK='me_v8_data', SK2='me_v8_settings';
+let db={members:{},snapshots:{}}, settings={allianceName:'THE RELENTLESS'};
+
+const SEED=[
+  {name:'*Osiris',date:'2026-05-30',atkMercsKilled:3869268060,defMercsKilled:4858906027,atkSoldiersKilled:2313361240,defSoldiersKilled:203466860,atkSSKilled:18939013363,defSSKilled:23316068433,spiesKilled:36929543100,spyKillersKilled:24979115916,msWeaponsDestroyed:3837533095,msShieldsDestroyed:3597338709,msFleetsDestroyed:30346817,planetDefDestroyed:16606601,planetsTaken:71,naqStolen:33659081703380796,uuRaided:75437235536,wpDestroyed:558511770031680,attackTurns:3677091,warPoints:20851419957802,atkMercsLost:1649475866,defMercsLost:1787051349,raidersLost:204954722,guardsLost:128134459,ssLost:16726128253,sgLost:10696539551,uaLost:13638409342,assLost:13037959319,msWeaponsLost:3646583631,msShieldsLost:3343820359,msFleetsLost:1097648,planetDefLost:1118717,planetsLost:51,naqLost:5426656588821305,untrainedLost:1459210333,wpLost:751482129176623,turnsAgainst:723526},
+  {name:'Jedi Tank',date:'2026-05-30',atkMercsKilled:514961394,defMercsKilled:473124968,atkSoldiersKilled:68504774,defSoldiersKilled:170770097,atkSSKilled:3152466820,defSSKilled:3160190577,spiesKilled:6160090048,spyKillersKilled:4581153692,msWeaponsDestroyed:216581840,msShieldsDestroyed:300465285,msFleetsDestroyed:2351116,planetDefDestroyed:6642497,planetsTaken:276,naqStolen:19807783199287512,uuRaided:38663674192,wpDestroyed:138556013313402,attackTurns:1588332,warPoints:5911924779572,atkMercsLost:431767924,defMercsLost:790847091,raidersLost:55773935,guardsLost:32526260,ssLost:3933288362,sgLost:3925022363,uaLost:8373213106,assLost:5966392691,msWeaponsLost:326806783,msShieldsLost:291781578,msFleetsLost:3974039,planetDefLost:213769,planetsLost:97,naqLost:3787570479646420,untrainedLost:3208625976,wpLost:294828795234902,turnsAgainst:529136},
+  {name:'Furiosa',date:'2026-05-30',atkMercsKilled:1935180611,defMercsKilled:6832201677,atkSoldiersKilled:58429060,defSoldiersKilled:384029638,atkSSKilled:3730974078,defSSKilled:11999148138,spiesKilled:12720068009,spyKillersKilled:1904670643,msWeaponsDestroyed:600786075,msShieldsDestroyed:569185876,msFleetsDestroyed:15552814,planetDefDestroyed:6086162,planetsTaken:416,naqStolen:30867367105804116,uuRaided:12357188644,wpDestroyed:266979603074662,attackTurns:9663894,warPoints:7275241584942,atkMercsLost:7004360620,defMercsLost:2173342701,raidersLost:377260826,guardsLost:87742960,ssLost:8857046639,sgLost:3532491425,uaLost:3316458661,assLost:5123848920,msWeaponsLost:603469002,msShieldsLost:490963346,msFleetsLost:1061177,planetDefLost:6244855,planetsLost:307,naqLost:9192440410359658,untrainedLost:3176789718,wpLost:469839747679756,turnsAgainst:952765},
+  // Rob3rt — updated May 30
+  {name:'Rob3rt',date:'2026-05-30',atkMercsKilled:3087914476,defMercsKilled:4167995544,atkSoldiersKilled:132172044,defSoldiersKilled:180376037,atkSSKilled:5747317352,defSSKilled:8855240885,spiesKilled:10786347136,spyKillersKilled:1352419096,msWeaponsDestroyed:603327662,msShieldsDestroyed:688207351,msFleetsDestroyed:8055710,planetDefDestroyed:3599367,planetsTaken:77,naqStolen:6102397936045227,uuRaided:5420472882,wpDestroyed:221958570576565,attackTurns:1454711,warPoints:4656125429273,atkMercsLost:2055922339,defMercsLost:2090079542,raidersLost:288106732,guardsLost:59138521,ssLost:5549150539,sgLost:6819950648,uaLost:6291064176,assLost:3960205376,msWeaponsLost:717053540,msShieldsLost:820280355,msFleetsLost:2394241,planetDefLost:13525468,planetsLost:60,naqLost:1615044523872516,untrainedLost:345123723,wpLost:367793754292213,turnsAgainst:466952},
+  // InR — updated May 30
+  {name:'InR',date:'2026-05-30',atkMercsKilled:1010642548,defMercsKilled:208848031,atkSoldiersKilled:29433839,defSoldiersKilled:125281419,atkSSKilled:3264727633,defSSKilled:1037280566,spiesKilled:4573171110,spyKillersKilled:1943000138,msWeaponsDestroyed:77898871,msShieldsDestroyed:170289851,msFleetsDestroyed:502626,planetDefDestroyed:834951,planetsTaken:42,naqStolen:1227429982347325,uuRaided:11920274107,wpDestroyed:94410059862658,attackTurns:237830,warPoints:2248640108871,atkMercsLost:465262429,defMercsLost:3376817652,raidersLost:20191992,guardsLost:132195,ssLost:1169458365,sgLost:4493982373,uaLost:7065801463,assLost:3669393610,msWeaponsLost:284989428,msShieldsLost:204360041,msFleetsLost:5801651,planetDefLost:17157828,planetsLost:35,naqLost:156500888861552,untrainedLost:155042759,wpLost:174968831290909,turnsAgainst:231195},
+  {name:'Osiris',date:'2026-05-30',atkMercsKilled:2151929008,defMercsKilled:2266450985,atkSoldiersKilled:918126485,defSoldiersKilled:169089664,atkSSKilled:9488087875,defSSKilled:9056991141,spiesKilled:16093416884,spyKillersKilled:25538687489,msWeaponsDestroyed:1584012034,msShieldsDestroyed:1391566726,msFleetsDestroyed:9237208,planetDefDestroyed:19367582,planetsTaken:39,naqStolen:21230564304467108,uuRaided:65675911380,wpDestroyed:297006200533405,attackTurns:2806944,warPoints:12316309423364,atkMercsLost:617203588,defMercsLost:1006477621,raidersLost:298670448,guardsLost:25996271,ssLost:6418646555,sgLost:7755970074,uaLost:6271636204,assLost:11076324522,msWeaponsLost:1078383236,msShieldsLost:1718868338,msFleetsLost:152336,planetDefLost:21838891,planetsLost:21,naqLost:3858922028945578,untrainedLost:2112464722,wpLost:469678414089419,turnsAgainst:418662},
+  // ~Star~ — from screenshots May 30
+  {name:'~Star~',date:'2026-05-30',atkMercsKilled:116374820,defMercsKilled:2130815,atkSoldiersKilled:60334681,defSoldiersKilled:2698058,atkSSKilled:409419582,defSSKilled:56317067,spiesKilled:299696408,spyKillersKilled:224064843,msWeaponsDestroyed:1593052,msShieldsDestroyed:10022558,msFleetsDestroyed:35139,planetDefDestroyed:10000,planetsTaken:23,naqStolen:7375949945949857,uuRaided:4992540690,wpDestroyed:21155980372188,attackTurns:299808,warPoints:1154664991360,atkMercsLost:54634412,defMercsLost:298417909,raidersLost:111338324,guardsLost:276039798,ssLost:99699649,sgLost:493447151,uaLost:2618811822,assLost:232895280,msWeaponsLost:14053590,msShieldsLost:12042263,msFleetsLost:64144,planetDefLost:1445914,planetsLost:15,naqLost:1854095906094112,untrainedLost:1359637424,wpLost:14960844710066,turnsAgainst:81166},
+  // Interstellar
+  {name:'Interstellar',date:'2026-05-30',atkMercsKilled:181547629,defMercsKilled:327040678,atkSoldiersKilled:75998265,defSoldiersKilled:64406409,atkSSKilled:1640378518,defSSKilled:873729075,spiesKilled:917867944,spyKillersKilled:2788709455,msWeaponsDestroyed:23652119,msShieldsDestroyed:42114019,msFleetsDestroyed:1157348,planetDefDestroyed:637071,planetsTaken:52,naqStolen:9556265547237096,uuRaided:44580202292,wpDestroyed:43473669564515,attackTurns:1164608,warPoints:3988518085768,atkMercsLost:433573301,defMercsLost:539225919,raidersLost:7377209432,guardsLost:93690181,ssLost:1018687350,sgLost:1575064470,uaLost:1973540243,assLost:1457347937,msWeaponsLost:56712569,msShieldsLost:57747678,msFleetsLost:237299,planetDefLost:4642860,planetsLost:56,naqLost:4366321081657336,untrainedLost:1867489927,wpLost:116301429544173,turnsAgainst:154081},
+  // *Interstellar
+  {name:'*Interstellar',date:'2026-05-30',atkMercsKilled:279865844,defMercsKilled:129976127,atkSoldiersKilled:191144566,defSoldiersKilled:45769071,atkSSKilled:1286542886,defSSKilled:1026817351,spiesKilled:1295048178,spyKillersKilled:6750586572,msWeaponsDestroyed:36083828,msShieldsDestroyed:69943343,msFleetsDestroyed:865310,planetDefDestroyed:790003,planetsTaken:26,naqStolen:140459288292325424,uuRaided:67879476101,wpDestroyed:67174651659794,attackTurns:5964233,warPoints:18391850538252,atkMercsLost:171224928,defMercsLost:318742313,raidersLost:10154528883,guardsLost:51574261,ssLost:1887910437,sgLost:1679536161,uaLost:3607192978,assLost:3377480773,msWeaponsLost:103822584,msShieldsLost:88925501,msFleetsLost:269492,planetDefLost:75000,planetsLost:31,naqLost:1186658279055968,untrainedLost:804355111,wpLost:242261796422144,turnsAgainst:155256},
+];
+
+const FIELD_MAP=[
+  {pat:/attack\s+mercs?\s+killed/i,field:'atkMercsKilled'},
+  {pat:/defence\s+mercs?\s+killed/i,field:'defMercsKilled'},
+  {pat:/attack\s+soldiers?\s+killed/i,field:'atkSoldiersKilled'},
+  {pat:/defence\s+soldiers?\s+killed/i,field:'defSoldiersKilled'},
+  {pat:/attack\s+super\s+soldiers?\s+killed/i,field:'atkSSKilled'},
+  {pat:/defence\s+super\s+soldiers?\s+killed/i,field:'defSSKilled'},
+  {pat:/^spies?\s+killed/i,field:'spiesKilled'},
+  {pat:/spy\s+killers?\s+killed/i,field:'spyKillersKilled'},
+  {pat:/mothership\s+weapons?\s+destroyed/i,field:'msWeaponsDestroyed'},
+  {pat:/mothership\s+shields?\s+destroyed/i,field:'msShieldsDestroyed'},
+  {pat:/mothership\s+fleets?\s+destroyed/i,field:'msFleetsDestroyed'},
+  {pat:/planet\s+defences?\s+destroyed/i,field:'planetDefDestroyed'},
+  {pat:/planets?\s+taken/i,field:'planetsTaken'},
+  {pat:/naquadah\s+stolen/i,field:'naqStolen'},
+  {pat:/untrained\s+kidnapped/i,field:'uuRaided'},
+  {pat:/weapon\s+points?\s+destroyed\s+\(sab\+att\)/i,field:'wpDestroyed'},
+  {pat:/attack\s+turns?\s+used\s*\(1\)/i,field:'attackTurns'},
+  {pat:/total\s+war\s+experience\s+points?/i,field:'warPoints'},
+  {pat:/attacking\s+mercenar/i,field:'atkMercsLost'},
+  {pat:/defending\s+mercenar/i,field:'defMercsLost'},
+  {pat:/raiders?\s+lost/i,field:'raidersLost'},
+  {pat:/questers?\s+lost/i,field:'raidersLost'},
+  {pat:/away\s+team\s+lost/i,field:'raidersLost'},
+  {pat:/^guards?\s+lost/i,field:'guardsLost'},
+  {pat:/defenders?\s+lost/i,field:'guardsLost'},
+  {pat:/home\s+guard\s+lost/i,field:'guardsLost'},
+  {pat:/super\s+soldiers?\s+lost/i,field:'ssLost'},
+  {pat:/super\s+questers?\s+lost/i,field:'ssLost'},
+  {pat:/super\s+guards?\s+lost/i,field:'sgLost'},
+  {pat:/super\s+defenders?\s+lost/i,field:'sgLost'},
+  {pat:/undercover\s+agents?\s+lost/i,field:'uaLost'},
+  {pat:/covert\s+(ops|agents?)\s+lost/i,field:'uaLost'},
+  {pat:/assassins?\s+lost/i,field:'assLost'},
+  {pat:/counter\s*intelligence\s+agents?\s+lost/i,field:'assLost'},
+  {pat:/anti.intelligence\s+drone\s+lost/i,field:'assLost'},
+  {pat:/mothership\s+weapons?\s+lost/i,field:'msWeaponsLost'},
+  {pat:/mothership\s+shields?\s+lost/i,field:'msShieldsLost'},
+  {pat:/mothership\s+fleets?\s+lost/i,field:'msFleetsLost'},
+  {pat:/planet\s+defences?\s+lost/i,field:'planetDefLost'},
+  {pat:/planets?\s+lost/i,field:'planetsLost'},
+  {pat:/naquadah\s+lost/i,field:'naqLost'},
+  {pat:/untrained\s+lost/i,field:'untrainedLost'},
+  {pat:/weapon\s+points?\s+destroyed\s+\(sab\+att\s+on\s+you\)/i,field:'wpLost'},
+  {pat:/attack\s+turns?\s+used\s+against\s+you/i,field:'turnsAgainst'},
+];
+
+const FIELD_LABELS={atkMercsKilled:'Atk Mercs Killed',defMercsKilled:'Def Mercs Killed',atkSoldiersKilled:'Atk Soldiers Killed',defSoldiersKilled:'Def Soldiers Killed',atkSSKilled:'Atk SS Killed',defSSKilled:'Def SS Killed',spiesKilled:'Spies Killed',spyKillersKilled:'Spy Killers Killed',msWeaponsDestroyed:'MS Weapons Destroyed',msShieldsDestroyed:'MS Shields Destroyed',msFleetsDestroyed:'MS Fleets Destroyed',planetDefDestroyed:'Planet Def Destroyed',planetsTaken:'Planets Taken',naqStolen:'Naq Stolen',uuRaided:'UU Raided',wpDestroyed:'WP Destroyed',attackTurns:'Atk Turns',warPoints:'TOTAL WAR XP',atkMercsLost:'Atk Mercs Lost',defMercsLost:'Def Mercs Lost',raidersLost:'Raiders Lost',guardsLost:'Guards Lost',ssLost:'SS Lost',sgLost:'SG Lost',uaLost:'UA Lost',assLost:'Assassins Lost',msWeaponsLost:'MS Weapons Lost',msShieldsLost:'MS Shields Lost',msFleetsLost:'MS Fleets Lost',planetDefLost:'Planet Def Lost',planetsLost:'Planets Lost',naqLost:'Naq Lost',untrainedLost:'Untrained Lost',wpLost:'WP Lost',turnsAgainst:'Turns Against'};
+
+let parsedData={};
+
+function parsePaste(){
+  const raw=document.getElementById('paste-area').value;
+  parsedData={};
+  if(!raw.trim()){document.getElementById('parse-preview').innerHTML='';return;}
+  raw.split('\n').forEach(line=>{
+    const parts=line.split(/\t|  +/);
+    if(parts.length<2)return;
+    const label=parts[0].trim();
+    const valStr=parts[parts.length-1].trim().replace(/,/g,'');
+    const val=parseFloat(valStr);
+    if(isNaN(val)||!label)return;
+    for(const{pat,field}of FIELD_MAP){if(pat.test(label)){if(parsedData[field]===undefined)parsedData[field]=val;break;}}
+  });
+  const keys=Object.keys(parsedData);
+  if(!keys.length){document.getElementById('parse-preview').innerHTML='<div class="parse-preview"><span style="color:var(--red)">Could not parse — copy the full ME table including labels and values.</span></div>';return;}
+  keys.forEach(f=>{const el=document.getElementById('f-'+f);if(el)el.value=parsedData[f];});
+  const hasWP=parsedData.warPoints!==undefined;
+  let html=`<div class="parse-preview"><div style="color:var(--green);font-family:var(--head);font-weight:700;margin-bottom:6px;">PARSED ${keys.length} FIELDS ${hasWP?'':'— WARNING: WAR XP NOT FOUND'}</div>`;
+  const priority=['warPoints','atkMercsKilled','defMercsKilled','atkSSKilled','defSSKilled','spiesKilled','spyKillersKilled','naqStolen','uuRaided','planetsTaken','naqLost'];
+  const shown=new Set();
+  [...priority,...keys].forEach(f=>{if(shown.has(f)||parsedData[f]===undefined)return;shown.add(f);html+=`<div class="parsed-field"><span class="pk">${FIELD_LABELS[f]||f}</span><span class="pv">${parsedData[f].toLocaleString()}</span></div>`;});
+  html+='</div>';
+  document.getElementById('parse-preview').innerHTML=html;
+}
+
+async function loadData(){
+  try{const r=await window.storage.get(SK);if(r)db=JSON.parse(r.value);}catch(e){}
+  try{const r=await window.storage.get(SK2);if(r)settings=JSON.parse(r.value);}catch(e){}
+  // Always reseed if fewer than 9 members
+  if(Object.keys(db.members).length<9){
+    db={members:{},snapshots:{}};
+    SEED.forEach(s=>{const{name,date,...rest}=s;
+      db.members[name]={added:date};
+      db.snapshots[name]=[{date,...rest}];
+    });
+    await saveData();
+  }
+  document.getElementById('alliance-name-display').textContent=settings.allianceName;
+  document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+  updateMemberCount();renderWeekly();renderLeaderboard();renderMembers();
+}
+
+async function saveData(){try{await window.storage.set(SK,JSON.stringify(db));}catch(e){}}
+function nv(id){const v=document.getElementById(id)?.value?.replace(/,/g,'').trim();return v?(parseFloat(v)||0):0;}
+function p(s){if(!s&&s!==0)return 0;return parseFloat(String(s).replace(/,/g,''))||0;}
+function fmt(n){n=p(n);const a=Math.abs(n);if(a>=1e15)return(n/1e15).toFixed(2)+'Q';if(a>=1e12)return(n/1e12).toFixed(2)+'T';if(a>=1e9)return(n/1e9).toFixed(2)+'B';if(a>=1e6)return(n/1e6).toFixed(2)+'M';if(a>=1e3)return(n/1e3).toFixed(1)+'K';return Math.round(n).toLocaleString();}
+function fmtD(n){return(n>=0?'+':'')+fmt(n);}
+
+function computed(snap){
+  if(!snap)return{};
+  return{...snap,
+    mercsKilled:p(snap.atkMercsKilled)+p(snap.defMercsKilled),
+    soldiersKilled:p(snap.atkSoldiersKilled)+p(snap.defSoldiersKilled),
+    superSoldiersKilled:p(snap.atkSSKilled)+p(snap.defSSKilled),
+    totalKilled:p(snap.atkMercsKilled)+p(snap.defMercsKilled)+p(snap.atkSoldiersKilled)+p(snap.defSoldiersKilled)+p(snap.atkSSKilled)+p(snap.defSSKilled)+p(snap.spiesKilled)+p(snap.spyKillersKilled),
+    totalRaided:p(snap.uuRaided),
+    planetsNet:p(snap.planetsTaken)-p(snap.planetsLost),
+  };
+}
+
+function getDelta(name,cat,period){
+  const snaps=db.snapshots[name]||[];
+  if(snaps.length<2)return null;
+  const latest=computed(snaps[snaps.length-1]);
+  let base;
+  if(period==='last')base=computed(snaps[snaps.length-2]);
+  else if(period==='all')base=computed(snaps[0]);
+  else{const idx=Math.max(0,snaps.length-1-parseInt(period));base=computed(snaps[idx]);}
+  return p(latest[cat]||0)-p(base[cat]||0);
+}
+
+const CATS={warPoints:{label:'WAR XP GAINED'},totalKilled:{label:'UNITS KILLED'},totalRaided:{label:'UNITS RAIDED'},superSoldiersKilled:{label:'SS KILLED'},soldiersKilled:{label:'SOLDIERS KILLED'},mercsKilled:{label:'MERCS KILLED'},spiesKilled:{label:'SPIES KILLED'},naqStolen:{label:'NAQ STOLEN'},planetsTaken:{label:'PLANETS TAKEN'},wpDestroyed:{label:'WP DESTROYED'},planetsNet:{label:'PLANETS NET'},naqLost:{label:'NAQ LOST'}};
+
+function switchTab(t){
+  const tabs=['weekly','leaderboard','members','add'];
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',tabs[i]===t));
+  document.querySelectorAll('.panel').forEach(el=>el.classList.remove('active'));
+  document.getElementById('panel-'+t)?.classList.add('active');
+}
+function updateMemberCount(){const c=Object.keys(db.members).length;document.getElementById('member-count-badge').textContent=c+' MEMBER'+(c===1?'':'S');}
+function getLatest(name){const s=db.snapshots[name]||[];return s.length?s[s.length-1]:null;}
+function getRanked(){return Object.keys(db.members).map(name=>({name,val:p(computed(getLatest(name)).warPoints||0)})).sort((a,b)=>b.val-a.val);}
+function safeN(n){return n.replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function medalEl(i){if(i===0)return'<span class="rank-medal medal-1">1</span>';if(i===1)return'<span class="rank-medal medal-2">2</span>';if(i===2)return'<span class="rank-medal medal-3">3</span>';return`<span class="rank-medal medal-n">${i+1}</span>`;}
+function nc(i){return i===0?'var(--gold)':i===1?'var(--silver)':i===2?'var(--bronze)':'#fff';}
+function bc(i){return i===0?'#c89000':i===1?'#8090a0':i===2?'#8b5010':'#2a6eba';}
+
+function renderWeekly(){
+  const cat=document.getElementById('wk-category').value;
+  const period=document.getElementById('wk-period').value;
+  const names=Object.keys(db.members);
+  if(!names.length){document.getElementById('wk-table-container').innerHTML='<div class="empty">NO MEMBERS YET</div>';return;}
+
+  const rows=names.map(name=>{
+    const snaps=db.snapshots[name]||[];
+    const delta=getDelta(name,cat,period);
+    return{name,delta:delta??0,hasData:snaps.length>=2,snaps:snaps.length};
+  }).sort((a,b)=>{
+    if(a.hasData!==b.hasData)return a.hasData?-1:1;
+    return b.delta-a.delta;
+  });
+
+  const maxDelta=rows.filter(r=>r.hasData&&r.delta>0)[0]?.delta||1;
+
+  const wMC=(i,r)=>{if(!r.hasData||r.delta<=0)return'medal-n';if(i===0)return'medal-0w';if(i===1)return'medal-1w';if(i===2)return'medal-2w';return'medal-n';};
+  const wNC=(i,r)=>{if(!r.hasData||r.delta<=0)return'var(--text3)';if(i===0)return'var(--green)';if(i===1)return'var(--accent)';if(i===2)return'var(--bronze)';return'#fff';};
+  const wBC=(i,r)=>{if(!r.hasData||r.delta<=0)return'#1a2330';if(i===0)return'#1a7a3a';if(i===1)return'#2a6eba';if(i===2)return'#8b5010';return'#2a6eba';};
+
+  let html=`<table><thead><tr><th style="width:44px">#</th><th>PLAYER</th><th style="text-align:right">GAINED</th><th style="text-align:right;width:70px">STATUS</th><th style="width:80px;text-align:right">BAR</th></tr></thead><tbody>`;
+  rows.forEach((r,i)=>{
+    const active=r.hasData&&r.delta>0;
+    const pct=active&&maxDelta?Math.round((r.delta/maxDelta)*100):0;
+    const status=!r.hasData?'<span class="inactive-badge">NO DATA</span>':r.delta<=0?'<span class="inactive-badge">INACTIVE</span>':'<span class="active-badge">ACTIVE</span>';
+    const rank=active?`<span class="rank-medal ${wMC(i,r)}">${i+1}</span>`:'<span class="rank-medal medal-n">—</span>';
+    const deltaStr=active?`<span style="color:var(--green)">${fmtD(r.delta)}</span>`:'<span style="color:var(--text3)">—</span>';
+    html+=`<tr class="data-row" onclick="openPlayerModal('${safeN(r.name)}')"><td>${rank}</td><td style="color:${wNC(i,r)};font-weight:700;">${r.name}</td><td class="num">${deltaStr}</td><td style="text-align:right;">${status}</td><td><div class="progress-wrap"><div class="progress-fill" style="width:${pct}%;background:${wBC(i,r)};"></div></div><div style="text-align:right;font-size:10px;color:var(--text3);margin-top:2px;">${pct>0?pct+'%':''}</div></td></tr>`;
+  });
+  html+='</tbody></table>';
+  document.getElementById('wk-table-container').innerHTML=html;
+
+  let totXP=0,totK=0,totR=0,totN=0;
+  names.forEach(name=>{totXP+=Math.max(0,getDelta(name,'warPoints',period)||0);totK+=Math.max(0,getDelta(name,'totalKilled',period)||0);totR+=Math.max(0,getDelta(name,'totalRaided',period)||0);totN+=Math.max(0,getDelta(name,'naqStolen',period)||0);});
+  document.getElementById('wk-totals').innerHTML=`<div class="metric"><div class="mlabel">XP GAINED</div><div class="mvalue" style="color:var(--green)">${fmt(totXP)}</div></div><div class="metric"><div class="mlabel">UNITS KILLED</div><div class="mvalue">${fmt(totK)}</div></div><div class="metric"><div class="mlabel">UNITS RAIDED</div><div class="mvalue">${fmt(totR)}</div></div><div class="metric"><div class="mlabel">NAQ STOLEN</div><div class="mvalue">${fmt(totN)}</div></div>`;
+}
+
+function renderLeaderboard(){
+  const cat=document.getElementById('lb-category').value;
+  const names=Object.keys(db.members);
+  if(!names.length){document.getElementById('lb-table-container').innerHTML='<div class="empty">NO MEMBERS YET</div>';return;}
+  const rows=names.map(name=>{const s=computed(getLatest(name));return{name,val:p(s[cat]||0)};}).sort((a,b)=>b.val-a.val);
+  const maxVal=rows[0]?.val||1;
+  document.getElementById('lb-table-container').innerHTML=`<table><thead><tr><th style="width:44px">#</th><th>PLAYER</th><th style="text-align:right">${CATS[cat]?.label||cat}</th><th style="width:80px;text-align:right">%</th></tr></thead><tbody>${rows.map((r,i)=>{const pct=maxVal?Math.round((r.val/maxVal)*100):0;return`<tr class="data-row" onclick="openPlayerModal('${safeN(r.name)}')"><td>${medalEl(i)}</td><td style="color:${nc(i)};font-weight:700;">${r.name}</td><td class="num">${fmt(r.val)}</td><td><div class="progress-wrap"><div class="progress-fill" style="width:${pct}%;background:${bc(i)};"></div></div><div style="text-align:right;font-size:10px;color:var(--text3);margin-top:2px;">${pct}%</div></td></tr>`;}).join('')}</tbody></table>`;
+  let totWP=0,totK=0,totR=0,totN=0;
+  names.forEach(name=>{const s=computed(getLatest(name));totWP+=p(s.warPoints);totK+=p(s.totalKilled);totR+=p(s.totalRaided);totN+=p(s.naqStolen);});
+  document.getElementById('alliance-totals').innerHTML=`<div class="metric"><div class="mlabel">TOTAL WAR XP</div><div class="mvalue" style="color:var(--gold)">${fmt(totWP)}</div></div><div class="metric"><div class="mlabel">UNITS KILLED</div><div class="mvalue">${fmt(totK)}</div></div><div class="metric"><div class="mlabel">UNITS RAIDED</div><div class="mvalue">${fmt(totR)}</div></div><div class="metric"><div class="mlabel">NAQ STOLEN</div><div class="mvalue">${fmt(totN)}</div></div>`;
+}
+
+function renderMembers(){
+  const q=document.getElementById('member-search').value.toLowerCase();
+  const names=Object.keys(db.members).filter(n=>n.toLowerCase().includes(q));
+  if(!names.length){document.getElementById('members-list').innerHTML='<div class="empty">NO MEMBERS FOUND</div>';return;}
+  const ranked=getRanked();const rankMap={};ranked.forEach((r,i)=>rankMap[r.name]=i);
+  document.getElementById('members-list').innerHTML=names.map(name=>{
+    const snaps=db.snapshots[name]||[];const latest=computed(getLatest(name));const prev=snaps.length>1?computed(snaps[snaps.length-2]):null;
+    const delta=prev?(p(latest.warPoints)-p(prev.warPoints)):null;const ri=rankMap[name]??99;
+    const icon=ri===0?'🥇':ri===1?'🥈':ri===2?'🥉':`<span style="font-size:13px;color:var(--text3);font-family:var(--head);font-weight:700;">#${ri+1}</span>`;
+    return`<div class="card" style="margin-bottom:8px;cursor:pointer;" onclick="openPlayerModal('${safeN(name)}')"><div style="display:flex;align-items:center;justify-content:space-between;"><div style="display:flex;align-items:center;gap:12px;"><div style="font-size:20px;line-height:1;min-width:28px;text-align:center;">${icon}</div><div><div style="font-weight:700;font-size:15px;color:${nc(ri)};font-family:var(--head);">${name}</div><div style="font-size:11px;color:var(--text3);font-family:var(--head);">${snaps.length} SNAPSHOT${snaps.length===1?'':'S'} · ${snaps[snaps.length-1]?.date||'—'}</div></div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:700;color:var(--accent);font-family:var(--head);">${fmt(latest.warPoints)} XP</div>${delta!==null?`<div class="${delta>=0?'delta-pos':'delta-neg'}">${fmtD(delta)} this period</div>`:''}</div></div></div>`;
+  }).join('');
+}
+
+function openPlayerModal(name){
+  const snaps=db.snapshots[name]||[];const latest=computed(getLatest(name));const prev=snaps.length>1?computed(snaps[snaps.length-2]):null;
+  const ranked=getRanked();const ri=ranked.findIndex(r=>r.name===name);
+  const medal=ri===0?'🥇':ri===1?'🥈':ri===2?'🥉':'#'+(ri+1);
+  document.getElementById('modal-player-name').textContent=`${medal} ${name}`;
+  const drow=(label,key)=>{const cur=p(latest[key]||0);const d=prev?(cur-p(prev[key]||0)):null;return`<tr><td style="color:var(--text2)">${label}</td><td class="num">${fmt(cur)}</td><td style="text-align:right;font-size:11px;" class="${d===null?'':d>0?'delta-pos':d<0?'delta-neg':''}">${d===null?'':(d>=0?'+':'')+fmt(d)}</td></tr>`;};
+  const histRows=[...snaps].reverse().slice(0,8).map((s,i,arr)=>{const p2=arr[i+1];const d=p2?(p(s.warPoints)-p(p2.warPoints)):null;return`<div class="snap-row"><span style="color:var(--text3)">${s.date}</span><span style="display:flex;gap:12px;align-items:center;"><span style="color:var(--accent);font-family:var(--head);font-weight:700;">${fmt(s.warPoints)} XP</span>${d!==null?`<span class="${d>=0?'delta-pos':'delta-neg'}">${fmtD(d)}</span>`:''}</span></div>`;}).join('');
+  document.getElementById('modal-content').innerHTML=`
+    <div class="grid3" style="margin-bottom:1.25rem;">
+      <div class="metric"><div class="mlabel">WAR XP</div><div class="mvalue" style="color:var(--gold)">${fmt(latest.warPoints)}</div></div>
+      <div class="metric"><div class="mlabel">TOTAL KILLED</div><div class="mvalue">${fmt(latest.totalKilled)}</div></div>
+      <div class="metric"><div class="mlabel">TOTAL RAIDED</div><div class="mvalue">${fmt(latest.totalRaided)}</div></div>
+    </div>
+    <p class="section-title">kills vs last snapshot</p>
+    <table style="margin-bottom:1.25rem;"><thead><tr><th>STAT</th><th style="text-align:right">CURRENT</th><th style="text-align:right">CHANGE</th></tr></thead><tbody>
+      ${drow('TOTAL KILLED','totalKilled')}${drow('ATK MERCS KILLED','atkMercsKilled')}${drow('DEF MERCS KILLED','defMercsKilled')}${drow('ATK SS KILLED','atkSSKilled')}${drow('DEF SS KILLED','defSSKilled')}${drow('SPIES KILLED','spiesKilled')}${drow('SPY KILLERS KILLED','spyKillersKilled')}
+    </tbody></table>
+    <p class="section-title">raids and economy vs last snapshot</p>
+    <table style="margin-bottom:1.25rem;"><thead><tr><th>STAT</th><th style="text-align:right">CURRENT</th><th style="text-align:right">CHANGE</th></tr></thead><tbody>
+      ${drow('TOTAL RAIDED (UU)','totalRaided')}${drow('NAQ STOLEN','naqStolen')}${drow('PLANETS TAKEN','planetsTaken')}${drow('WP DESTROYED','wpDestroyed')}
+    </tbody></table>
+    <p class="section-title">losses vs last snapshot</p>
+    <table style="margin-bottom:1.25rem;"><thead><tr><th>STAT</th><th style="text-align:right">CURRENT</th><th style="text-align:right">CHANGE</th></tr></thead><tbody>
+      ${drow('NAQ LOST','naqLost')}${drow('PLANETS LOST','planetsLost')}
+    </tbody></table>
+    <p class="section-title">snapshot history</p>
+    <div style="margin-bottom:1rem;">${histRows||'<div class="empty" style="padding:1rem">NO HISTORY YET</div>'}</div>
+    <hr class="divider">
+    <div style="display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;">
+      <button class="btn btn-sm" onclick="prefillUpdate('${safeN(name)}')">UPDATE ME</button>
+      <button class="btn btn-sm danger" onclick="deleteMember('${safeN(name)}')">DELETE PLAYER</button>
+    </div>`;
+  document.getElementById('player-modal').classList.add('open');
+}
+
+function prefillUpdate(name){
+  document.getElementById('player-modal').classList.remove('open');
+  switchTab('add');
+  document.getElementById('f-name').value=name;
+  document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('paste-area').value='';
+  document.getElementById('parse-preview').innerHTML='';
+  parsedData={};
+}
+
+async function deleteMember(name){if(!confirm('Delete '+name+' and all snapshots?'))return;delete db.members[name];delete db.snapshots[name];await saveData();document.getElementById('player-modal').classList.remove('open');updateMemberCount();renderWeekly();renderMembers();renderLeaderboard();}
+
+function clearAll(){
+  document.getElementById('paste-area').value='';document.getElementById('parse-preview').innerHTML='';parsedData={};
+  ['f-name','f-atkMercsKilled','f-defMercsKilled','f-atkSoldiersKilled','f-defSoldiersKilled','f-atkSSKilled','f-defSSKilled','f-spiesKilled','f-spyKillersKilled','f-msWeaponsDestroyed','f-msShieldsDestroyed','f-msFleetsDestroyed','f-planetDefDestroyed','f-planetsTaken','f-naqStolen','f-uuRaided','f-wpDestroyed','f-attackTurns','f-warPoints','f-atkMercsLost','f-defMercsLost','f-raidersLost','f-guardsLost','f-ssLost','f-sgLost','f-uaLost','f-assLost','f-msWeaponsLost','f-msShieldsLost','f-msFleetsLost','f-planetDefLost','f-planetsLost','f-naqLost','f-untrainedLost','f-wpLost','f-turnsAgainst'].forEach(id=>{const el=document.getElementById(id);if(el&&el.type!=='date')el.value='';});
+  document.getElementById('save-status').textContent='';
+}
+
+async function saveSnapshot(){
+  const name=document.getElementById('f-name').value.trim();
+  const date=document.getElementById('f-date').value;
+  if(!name){document.getElementById('save-status').innerHTML='<span style="color:var(--red)">PLAYER NAME REQUIRED</span>';return;}
+  if(!date){document.getElementById('save-status').innerHTML='<span style="color:var(--red)">DATE REQUIRED</span>';return;}
+  const fieldNames=['atkMercsKilled','defMercsKilled','atkSoldiersKilled','defSoldiersKilled','atkSSKilled','defSSKilled','spiesKilled','spyKillersKilled','msWeaponsDestroyed','msShieldsDestroyed','msFleetsDestroyed','planetDefDestroyed','planetsTaken','naqStolen','uuRaided','wpDestroyed','attackTurns','warPoints','atkMercsLost','defMercsLost','raidersLost','guardsLost','ssLost','sgLost','uaLost','assLost','msWeaponsLost','msShieldsLost','msFleetsLost','planetDefLost','planetsLost','naqLost','untrainedLost','wpLost','turnsAgainst'];
+  const snap={date};
+  fieldNames.forEach(f=>{snap[f]=parsedData[f]!==undefined?parsedData[f]:nv('f-'+f);});
+  if(!db.members[name])db.members[name]={added:date};
+  if(!db.snapshots[name])db.snapshots[name]=[];
+  const idx=db.snapshots[name].findIndex(s=>s.date===date);
+  if(idx>=0)db.snapshots[name][idx]=snap;else{db.snapshots[name].push(snap);db.snapshots[name].sort((a,b)=>a.date.localeCompare(b.date));}
+  await saveData();
+  document.getElementById('save-status').innerHTML=`<span style="color:var(--green)">SAVED — ${name} / ${date}</span>`;
+  updateMemberCount();renderWeekly();renderLeaderboard();renderMembers();
+}
+
+function openSettings(){document.getElementById('s-alliance-name').value=settings.allianceName;document.getElementById('settings-modal').classList.add('open');}
+async function saveSettings(){settings.allianceName=document.getElementById('s-alliance-name').value.trim()||'THE RELENTLESS';try{await window.storage.set(SK2,JSON.stringify(settings));}catch(e){}document.getElementById('alliance-name-display').textContent=settings.allianceName;document.getElementById('settings-modal').classList.remove('open');}
+
+loadData();
+</script>
